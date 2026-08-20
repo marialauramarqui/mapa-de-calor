@@ -56,6 +56,11 @@
     padding: 26px 26px 22px;
   }
 
+  .nav { display: flex; gap: 14px; margin-bottom: 16px; font-size: 12.5px; }
+  .nav a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--hairline); padding-bottom: 2px; }
+  .nav a:hover { color: var(--ink); border-color: var(--muted); }
+  .nav a[aria-current="page"] { color: var(--ink); border-color: var(--muted); font-weight: 550; }
+
   h1 { font-size: 21px; line-height: 1.25; margin: 0 0 6px; font-weight: 650; letter-spacing: -0.01em; }
   .sub { font-size: 13.5px; color: var(--ink-2); margin: 0; }
   .ficticio {
@@ -122,6 +127,11 @@
 <body>
 <div class="wrap">
   <div class="card">
+    <nav class="nav">
+      <a href="./" aria-current="page">Volume por dia e hora</a>
+      <a href="./variacao.html">Variação por categoria</a>
+    </nav>
+
     <h1>Pedidos por dia da semana e hora</h1>
     <p class="sub">Volume médio de pedidos na janela das 08h às 21h.</p>
     <span class="ficticio">Dados fictícios — apenas demonstração</span>
