@@ -1,15 +1,18 @@
 # Mapas de Calor — exemplos
 
-Dois mapas de calor em HTML puro, cada um demonstrando um **tipo diferente de escala de cor**.
+Dois mapas de calor **na mesma página**, cada um demonstrando um tipo diferente
+de escala de cor.
 
 **Todos os dados são fictícios**, gerados só para demonstrar as visualizações.
 
 ## Ver online
 
+https://marialauramarqui.github.io/mapa-de-calor/
+
 | Exemplo | O que mostra | Escala |
 |---|---|---|
-| [Volume por dia e hora](https://marialauramarqui.github.io/mapa-de-calor/) | pedidos por dia da semana × hora (08h–21h) | **sequencial** — uma cor só, claro → escuro |
-| [Variação por categoria](https://marialauramarqui.github.io/mapa-de-calor/variacao.html) | variação % do faturamento vs. ano anterior, por categoria × mês | **divergente** — duas cores + cinza neutro no zero |
+| Pedidos por dia da semana e hora | volume de pedidos, dia × hora (08h–21h) | **sequencial** — uma cor só, claro → escuro |
+| Variação do faturamento por categoria | variação % vs. ano anterior, categoria × mês | **divergente** — duas cores + cinza neutro no zero |
 
 ## Por que duas escalas diferentes
 
@@ -21,8 +24,9 @@ Dois mapas de calor em HTML puro, cada um demonstrando um **tipo diferente de es
 
 ## Detalhes de implementação
 
-- HTML/CSS/JS puro, um arquivo por exemplo, sem nenhuma dependência externa
+- Arquivo único de HTML/CSS/JS puro, sem nenhuma dependência externa
 - O valor é impresso **dentro de cada célula** e repetido no tooltip do hover
-- Botão **Ver tabela** com os mesmos números — a leitura nunca depende só da cor
+- Botão **Ver tabela** em cada exemplo, com os mesmos números — a leitura nunca
+  depende só da cor
 - Tema claro e escuro, com paleta própria para cada um (não é inversão automática),
   seguindo o sistema e com alternância manual
