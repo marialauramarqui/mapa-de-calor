@@ -20,11 +20,6 @@
     --s5:#5598e7; --s6:#2a78d6; --s7:#1c5cab; --s8:#0d366b;
     --fs1:#0b0b0b; --fs2:#0b0b0b; --fs3:#0b0b0b; --fs4:#0b0b0b;
     --fs5:#0b0b0b; --fs6:#ffffff; --fs7:#ffffff; --fs8:#ffffff;
-
-    /* bolinhas: uma cor só — o tamanho é que carrega o valor */
-    --bolha:      #2a78d6;
-    --bolha-hover:#0d366b;
-    --celula:     #f4f3f0;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -35,9 +30,6 @@
       --s5:#3987e5; --s6:#6da7ec; --s7:#9ec5f4; --s8:#cde2fb;
       --fs1:#c3c2b7; --fs2:#ffffff; --fs3:#ffffff; --fs4:#ffffff;
       --fs5:#ffffff; --fs6:#0b0b0b; --fs7:#0b0b0b; --fs8:#0b0b0b;
-      --bolha:      #5598e7;
-      --bolha-hover:#cde2fb;
-      --celula:     #232322;
     }
   }
   :root[data-theme="dark"] {
@@ -48,9 +40,12 @@
     --s5:#3987e5; --s6:#6da7ec; --s7:#9ec5f4; --s8:#cde2fb;
     --fs1:#c3c2b7; --fs2:#ffffff; --fs3:#ffffff; --fs4:#ffffff;
     --fs5:#ffffff; --fs6:#0b0b0b; --fs7:#0b0b0b; --fs8:#0b0b0b;
-    --bolha:      #5598e7;
-    --bolha-hover:#cde2fb;
-    --celula:     #232322;
+  }
+
+  /* semáforo — as mesmas cores nos dois temas (cores de estado não mudam) */
+  :root, :root[data-theme="dark"] {
+    --g1:#d03b3b; --g2:#ec835a; --g3:#fab219; --g4:#0ca30c; --g5:#077a07;
+    --fg1:#ffffff; --fg2:#0b0b0b; --fg3:#0b0b0b; --fg4:#0b0b0b; --fg5:#ffffff;
   }
 
   * { box-sizing: border-box; }
@@ -106,40 +101,43 @@
   .lbl-col { justify-content: center; padding-bottom: 5px; }
   .lbl-row { justify-content: flex-end; padding-right: 10px; white-space: nowrap; }
 
-  /* ── células preenchidas (exemplo 1) ── */
   .cell {
     height: 34px; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
     font-size: 11px; font-variant-numeric: tabular-nums;
     cursor: default;
   }
   .cell:hover { outline: 2px solid var(--surface); outline-offset: -1px; box-shadow: 0 0 0 2px var(--ink-2); }
+  .cell .sinal { font-size: 9px; opacity: .85; }
+
   .c1{background:var(--s1);color:var(--fs1)} .c2{background:var(--s2);color:var(--fs2)}
   .c3{background:var(--s3);color:var(--fs3)} .c4{background:var(--s4);color:var(--fs4)}
   .c5{background:var(--s5);color:var(--fs5)} .c6{background:var(--s6);color:var(--fs6)}
   .c7{background:var(--s7);color:var(--fs7)} .c8{background:var(--s8);color:var(--fs8)}
 
-  /* ── bolinhas (exemplo 2) ── */
-  .bolha-cel {
-    height: 40px; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: default; background: var(--celula);
-  }
-  .bolha-cel:hover { box-shadow: inset 0 0 0 1px var(--muted); }
-  .bolha {
-    display: block; border-radius: 50%;
-    background: var(--bolha);
-    box-shadow: 0 0 0 2px var(--surface);
-    transition: background .12s;
-  }
-  .bolha-cel:hover .bolha { background: var(--bolha-hover); }
+  .g1{background:var(--g1);color:var(--fg1)} .g2{background:var(--g2);color:var(--fg2)}
+  .g3{background:var(--g3);color:var(--fg3)} .g4{background:var(--g4);color:var(--fg4)}
+  .g5{background:var(--g5);color:var(--fg5)}
 
   .legend { display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: 11.5px; color: var(--muted); flex-wrap: wrap; }
   .ramp { display: flex; gap: 2px; }
   .ramp span { width: 24px; height: 10px; border-radius: 2px; }
-  .legend-bolhas { display: flex; align-items: center; gap: 16px; }
-  .legend-bolhas .item { display: flex; align-items: center; gap: 7px; }
-  .legend-bolhas .bolha { box-shadow: none; }
+
+  /* legenda com faixas nomeadas */
+  .faixas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+  .faixa {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 9px 4px 5px; border-radius: 999px;
+    border: 1px solid var(--hairline);
+    font-size: 11.5px; color: var(--ink-2);
+  }
+  .faixa .chip {
+    width: 16px; height: 16px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700;
+  }
+  .faixa b { color: var(--ink); font-weight: 600; }
+  .faixa .lim { color: var(--muted); font-variant-numeric: tabular-nums; }
 
   #tip {
     position: fixed; pointer-events: none; opacity: 0; transition: opacity .1s;
@@ -170,17 +168,17 @@
   <header class="topo">
     <div>
       <h1>Mapas de calor</h1>
-      <p>Dois exemplos na mesma página: um preenchendo a célula com cor, outro usando o tamanho da bolinha.</p>
+      <p>Dois exemplos na mesma página: um medindo volume, outro medindo desempenho contra uma meta.</p>
       <span class="ficticio">Dados fictícios — apenas demonstração</span>
     </div>
     <button id="btn-tema">Alternar tema</button>
   </header>
 
-  <!-- ── exemplo 1: células coloridas ──────────────────────────────────── -->
+  <!-- ── exemplo 1: sequencial ─────────────────────────────────────────── -->
   <section class="card">
     <h2>Pedidos por dia da semana e hora</h2>
     <p class="sub">Volume médio de pedidos na janela das 08h às 21h.</p>
-    <span class="escala">Célula colorida · escala sequencial</span>
+    <span class="escala">Escala sequencial · uma cor só</span>
 
     <div class="toolbar"><button data-alvo="a">Ver tabela</button></div>
 
@@ -198,43 +196,38 @@
     <div id="tab-a" class="tbl-scroll" hidden></div>
 
     <p class="foot">
-      Uma cor só, variando da mais clara (menor volume) para a mais escura (maior).
-      O valor aparece dentro da célula e no tooltip.
+      Aqui não existe "bom" e "ruim" — só mais e menos. Por isso uma cor só,
+      variando da mais clara para a mais escura.
     </p>
   </section>
 
-  <!-- ── exemplo 2: bolinhas ───────────────────────────────────────────── -->
+  <!-- ── exemplo 2: semáforo ───────────────────────────────────────────── -->
   <section class="card">
-    <h2>Peças vendidas por categoria e mês</h2>
-    <p class="sub">Quantidade de peças vendidas ao longo do ano, por categoria.</p>
-    <span class="escala">Bolinha · o tamanho é o valor</span>
+    <h2>Atingimento da meta de vendas por loja</h2>
+    <p class="sub">Percentual da meta mensal batido em cada loja. 100% é exatamente a meta.</p>
+    <span class="escala">Semáforo · vermelho, amarelo e verde</span>
 
     <div class="toolbar"><button data-alvo="b">Ver tabela</button></div>
 
     <div id="vis-b">
       <div class="scroll"><div class="grid" id="grid-b"></div></div>
-      <div class="legend">
-        <span class="legend-bolhas" id="legenda-bolhas"></span>
-        <span style="margin-left:6px">&mdash; a <em>área</em> do círculo é proporcional à quantidade</span>
-      </div>
+      <div class="faixas" id="faixas"></div>
     </div>
     <div id="tab-b" class="tbl-scroll" hidden></div>
 
     <p class="foot">
-      Aqui quem carrega o valor é o tamanho, não a cor — por isso todas as bolinhas
-      têm a mesma cor. Passe o mouse para ver a quantidade exata.
+      Cada faixa tem nome, limite e um símbolo próprio &mdash; a cor sozinha não decide nada,
+      porque vermelho e verde são exatamente o par que quem tem daltonismo não separa.
     </p>
   </section>
 
   <p class="nota">
-    <strong>Quando usar cada um?</strong> A <strong>célula colorida</strong> preenche a
-    grade inteira, então funciona bem para enxergar blocos e faixas — o padrão salta aos
-    olhos mesmo de longe. A <strong>bolinha</strong> deixa o fundo respirar e compara
-    valores individuais com mais precisão, porque o olho lê diferença de tamanho melhor do
-    que diferença de tom; em compensação, os padrões amplos ficam menos evidentes. Uma
-    regra prática: <em>densidade</em> pede célula, <em>comparação ponto a ponto</em> pede
-    bolinha. Nos dois casos o número está no tooltip e na tabela — a leitura nunca depende
-    só do desenho.
+    <strong>Por que só um dos dois usa semáforo?</strong> Vermelho-amarelo-verde carrega
+    julgamento: diz que um lado é ruim e o outro é bom. Isso só faz sentido quando existe
+    de fato um alvo &mdash; aqui, os 100% da meta. No mapa de pedidos não existe alvo
+    nenhum: 140 pedidos numa sexta à noite não é "verde", é só um número maior. Pintar
+    aquilo de vermelho e verde inventaria um juízo que o dado não tem. É a diferença entre
+    <em>medir</em> e <em>avaliar</em> &mdash; e cada uma pede um tipo de cor.
   </p>
 
 </div>
@@ -258,40 +251,47 @@ const A = {
 };
 
 const B = {
-  linhas: ["Vestidos","Blusas","Calças","Saias","Jaquetas","Acessórios","Calçados","Moda praia","Infantil"],
+  linhas: ["Centro","Shopping Norte","Shopping Sul","Praia Grande","Zona Leste",
+           "Vila Nova","Aeroporto","Outlet","Interior","Online"],
   colunas: ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
   m: [
-    [211, 231, 271, 266, 213, 211, 262, 260, 200, 168, 151, 111],
-    [294, 231, 256, 372, 426, 406, 394, 344, 207, 121, 186, 276],
-    [135, 177, 209, 264, 282, 217, 151, 152, 161, 143, 150, 176],
-    [187, 192, 139,  75,  42,  23,  12,  39,  87, 108, 112, 138],
-    [ 14,  14,  14,  95, 234, 355, 375, 306, 214, 108,  14,  14],
-    [144, 229, 362, 393, 344, 316, 279, 200, 178, 242, 264, 207],
-    [147, 153, 174, 178, 146, 138, 172, 178, 136, 106,  98,  79],
-    [378, 307, 201, 106,  13,  13,  13,  13,  13,  73, 224, 351],
-    [121, 169, 195, 236, 257, 204, 137, 134, 151, 138, 134, 156]
+    [118, 107, 112, 103,  99,  87,  90, 116, 122, 119,  96,  90],
+    [124, 103,  95,  98, 119, 116, 119, 121, 117, 111,  89,  99],
+    [ 88,  87,  83, 101, 120, 109,  97,  78,  87,  97,  96, 105],
+    [ 92, 107,  96, 100,  96,  89,  80,  71,  97, 109, 110,  93],
+    [102, 102,  79,  69,  64,  85,  88,  87,  94,  89,  88,  65],
+    [106,  96,  91,  87,  95, 122, 118, 106,  87,  86, 100,  98],
+    [102, 111, 131, 124, 124, 126, 117, 111,  95, 114, 133, 137],
+    [ 82, 100, 112,  91,  78,  68,  83,  94,  89,  99,  96,  96],
+    [ 76,  79,  74,  64,  61,  61,  89,  94,  84,  67,  56,  71],
+    [106, 105, 109, 129, 130, 125, 132, 123, 118, 100, 107, 132]
   ]
 };
 
-// ── escala do exemplo 1 (cor) ──────────────────────────────────────────
+// ── escala do exemplo 1 ────────────────────────────────────────────────
 const flatA = A.m.flat();
 const minA = Math.min(...flatA), maxA = Math.max(...flatA);
 document.getElementById('lmin').textContent = minA + ' pedidos';
 document.getElementById('lmax').textContent = maxA + ' pedidos';
 const classeA = v => 'c' + Math.min(8, Math.max(1, Math.ceil(((v - minA) / ((maxA - minA) || 1)) * 8) || 1));
 
-// ── escala do exemplo 2 (tamanho) ──────────────────────────────────────
-// área proporcional ao valor => diâmetro proporcional à raiz quadrada.
-// usar o diâmetro direto exageraria as diferenças.
-const maxB = Math.max(...B.m.flat());
-const D_MAX = 30, D_MIN = 6;
-const diametro = v => Math.max(D_MIN, D_MAX * Math.sqrt(v / maxB));
+// ── faixas do exemplo 2 ────────────────────────────────────────────────
+// cada faixa tem cor, nome, símbolo e limite — a cor nunca informa sozinha
+const FAIXAS = [
+  { cls:'g1', sinal:'▼', nome:'Crítico',  lim:'abaixo de 70%',  ate: 70 },
+  { cls:'g2', sinal:'▽', nome:'Abaixo',   lim:'70% a 84%',      ate: 85 },
+  { cls:'g3', sinal:'◆', nome:'Atenção',  lim:'85% a 94%',      ate: 95 },
+  { cls:'g4', sinal:'△', nome:'Na meta',  lim:'95% a 104%',     ate:105 },
+  { cls:'g5', sinal:'▲', nome:'Acima',    lim:'105% ou mais',   ate:Infinity }
+];
+const faixaDe = v => FAIXAS.find(f => v < f.ate);
 
-// ── render: exemplo 1 ──────────────────────────────────────────────────
-function renderCelulas(dados, grade, tabela) {
+// ── render ─────────────────────────────────────────────────────────────
+function render(cfg) {
+  const { dados, grade, tabela, largura, minLargura, classe, texto, sinal, rotulo, dica } = cfg;
   const grid = document.getElementById(grade);
-  grid.style.gridTemplateColumns = '72px repeat(' + dados.colunas.length + ', minmax(34px, 1fr))';
-  grid.style.minWidth = '620px';
+  grid.style.gridTemplateColumns = largura + ' repeat(' + dados.colunas.length + ', minmax(38px, 1fr))';
+  grid.style.minWidth = minLargura;
 
   grid.appendChild(document.createElement('div'));
   dados.colunas.forEach(col => {
@@ -307,73 +307,21 @@ function renderCelulas(dados, grade, tabela) {
     dados.colunas.forEach((col, j) => {
       const v = dados.m[i][j];
       const c = document.createElement('div');
-      c.className = 'cell ' + classeA(v);
-      c.textContent = v;
-      c.dataset.tip = '<b>' + v + '</b> pedidos|' + linha + ' &middot; ' + col;
+      c.className = 'cell ' + classe(v);
+      if (sinal) {
+        const s = document.createElement('span');
+        s.className = 'sinal'; s.textContent = sinal(v); s.setAttribute('aria-hidden', 'true');
+        c.append(s, document.createTextNode(texto(v)));
+      } else {
+        c.textContent = texto(v);
+      }
+      c.dataset.tip = dica(v, linha, col);
       c.setAttribute('role', 'img');
-      c.setAttribute('aria-label', linha + ', ' + col + ': ' + v + ' pedidos');
+      c.setAttribute('aria-label', rotulo(v, linha, col));
       grid.appendChild(c);
     });
   });
-  montarTabela(dados, tabela, v => String(v));
-}
 
-// ── render: exemplo 2 ──────────────────────────────────────────────────
-function renderBolhas(dados, grade, tabela) {
-  const grid = document.getElementById(grade);
-  grid.style.gridTemplateColumns = '92px repeat(' + dados.colunas.length + ', minmax(40px, 1fr))';
-  grid.style.minWidth = '680px';
-
-  grid.appendChild(document.createElement('div'));
-  dados.colunas.forEach(col => {
-    const d = document.createElement('div');
-    d.className = 'lbl-col'; d.textContent = col;
-    grid.appendChild(d);
-  });
-
-  dados.linhas.forEach((linha, i) => {
-    const r = document.createElement('div');
-    r.className = 'lbl-row'; r.textContent = linha;
-    grid.appendChild(r);
-    dados.colunas.forEach((col, j) => {
-      const v = dados.m[i][j];
-      const cel = document.createElement('div');
-      cel.className = 'bolha-cel';
-      cel.dataset.tip = '<b>' + v + '</b> peças|' + linha + ' &middot; ' + col;
-      cel.setAttribute('role', 'img');
-      cel.setAttribute('aria-label', linha + ', ' + col + ': ' + v + ' peças vendidas');
-
-      const b = document.createElement('span');
-      b.className = 'bolha';
-      const d = diametro(v);
-      b.style.width = d.toFixed(1) + 'px';
-      b.style.height = d.toFixed(1) + 'px';
-      cel.appendChild(b);
-      grid.appendChild(cel);
-    });
-  });
-
-  // legenda: três círculos de referência
-  const leg = document.getElementById('legenda-bolhas');
-  [50, 200, 400].forEach(v => {
-    const item = document.createElement('span');
-    item.className = 'item';
-    const b = document.createElement('span');
-    b.className = 'bolha';
-    const d = diametro(v);
-    b.style.width = d.toFixed(1) + 'px';
-    b.style.height = d.toFixed(1) + 'px';
-    const t = document.createElement('span');
-    t.textContent = v;
-    item.append(b, t);
-    leg.appendChild(item);
-  });
-
-  montarTabela(dados, tabela, v => String(v));
-}
-
-// ── tabela equivalente (os dois exemplos) ──────────────────────────────
-function montarTabela(dados, alvo, texto) {
   let html = '<table><caption>Os mesmos dados em tabela.</caption><thead><tr><th>&nbsp;</th>';
   dados.colunas.forEach(col => { html += '<th>' + col + '</th>'; });
   html += '</tr></thead><tbody>';
@@ -382,13 +330,38 @@ function montarTabela(dados, alvo, texto) {
     dados.m[i].forEach(v => { html += '<td>' + texto(v) + '</td>'; });
     html += '</tr>';
   });
-  document.getElementById(alvo).innerHTML = html + '</tbody></table>';
+  document.getElementById(tabela).innerHTML = html + '</tbody></table>';
 }
 
-renderCelulas(A, 'grid-a', 'tab-a');
-renderBolhas(B, 'grid-b', 'tab-b');
+render({
+  dados: A, grade: 'grid-a', tabela: 'tab-a', classe: classeA,
+  largura: '72px', minLargura: '620px',
+  texto: v => String(v),
+  rotulo: (v, l, c) => l + ', ' + c + ': ' + v + ' pedidos',
+  dica: (v, l, c) => '<b>' + v + '</b> pedidos|' + l + ' &middot; ' + c
+});
 
-// ── tooltip (um só, compartilhado) ─────────────────────────────────────
+render({
+  dados: B, grade: 'grid-b', tabela: 'tab-b',
+  classe: v => faixaDe(v).cls,
+  largura: '112px', minLargura: '700px',
+  texto: v => v + '%',
+  sinal: v => faixaDe(v).sinal,
+  rotulo: (v, l, c) => l + ', ' + c + ': ' + v + ' por cento da meta — ' + faixaDe(v).nome,
+  dica: (v, l, c) => '<b>' + v + '%</b> da meta|' + l + ' &middot; ' + c + ' &middot; ' + faixaDe(v).nome
+});
+
+// legenda das faixas
+const legFaixas = document.getElementById('faixas');
+FAIXAS.forEach(f => {
+  const el = document.createElement('span');
+  el.className = 'faixa';
+  el.innerHTML = '<span class="chip ' + f.cls + '">' + f.sinal + '</span>' +
+                 '<b>' + f.nome + '</b> <span class="lim">' + f.lim + '</span>';
+  legFaixas.appendChild(el);
+});
+
+// ── tooltip ────────────────────────────────────────────────────────────
 const tip = document.getElementById('tip');
 document.addEventListener('mouseover', e => {
   const c = e.target.closest('[data-tip]');
