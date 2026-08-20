@@ -21,13 +21,10 @@
     --fs1:#0b0b0b; --fs2:#0b0b0b; --fs3:#0b0b0b; --fs4:#0b0b0b;
     --fs5:#0b0b0b; --fs6:#ffffff; --fs7:#ffffff; --fs8:#ffffff;
 
-    /* escala divergente: vermelho <- cinza neutro -> azul */
-    --n4:#9c2726; --n3:#d94a49; --n2:#ee9b9a; --n1:#f7cdcc;
-    --mid:#f0efec;
-    --p1:#cde2fb; --p2:#86b6ef; --p3:#2a78d6; --p4:#0d366b;
-    --fn4:#ffffff; --fn3:#0b0b0b; --fn2:#0b0b0b; --fn1:#0b0b0b;
-    --fmid:#52514e;
-    --fp1:#0b0b0b; --fp2:#0b0b0b; --fp3:#0b0b0b; --fp4:#ffffff;
+    /* bolinhas: uma cor só — o tamanho é que carrega o valor */
+    --bolha:      #2a78d6;
+    --bolha-hover:#0d366b;
+    --celula:     #f4f3f0;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -38,12 +35,9 @@
       --s5:#3987e5; --s6:#6da7ec; --s7:#9ec5f4; --s8:#cde2fb;
       --fs1:#c3c2b7; --fs2:#ffffff; --fs3:#ffffff; --fs4:#ffffff;
       --fs5:#ffffff; --fs6:#0b0b0b; --fs7:#0b0b0b; --fs8:#0b0b0b;
-      --n4:#ef9695; --n3:#d0605f; --n2:#a94241; --n1:#78302f;
-      --mid:#383835;
-      --p1:#17538f; --p2:#2a78d6; --p3:#5598e7; --p4:#9ec5f4;
-      --fn4:#0b0b0b; --fn3:#0b0b0b; --fn2:#ffffff; --fn1:#ffffff;
-      --fmid:#c3c2b7;
-      --fp1:#ffffff; --fp2:#0b0b0b; --fp3:#0b0b0b; --fp4:#0b0b0b;
+      --bolha:      #5598e7;
+      --bolha-hover:#cde2fb;
+      --celula:     #232322;
     }
   }
   :root[data-theme="dark"] {
@@ -54,12 +48,9 @@
     --s5:#3987e5; --s6:#6da7ec; --s7:#9ec5f4; --s8:#cde2fb;
     --fs1:#c3c2b7; --fs2:#ffffff; --fs3:#ffffff; --fs4:#ffffff;
     --fs5:#ffffff; --fs6:#0b0b0b; --fs7:#0b0b0b; --fs8:#0b0b0b;
-    --n4:#ef9695; --n3:#d0605f; --n2:#a94241; --n1:#78302f;
-    --mid:#383835;
-    --p1:#17538f; --p2:#2a78d6; --p3:#5598e7; --p4:#9ec5f4;
-    --fn4:#0b0b0b; --fn3:#0b0b0b; --fn2:#ffffff; --fn1:#ffffff;
-    --fmid:#c3c2b7;
-    --fp1:#ffffff; --fp2:#0b0b0b; --fp3:#0b0b0b; --fp4:#0b0b0b;
+    --bolha:      #5598e7;
+    --bolha-hover:#cde2fb;
+    --celula:     #232322;
   }
 
   * { box-sizing: border-box; }
@@ -71,7 +62,6 @@
   }
   .wrap { max-width: 940px; margin: 0 auto; }
 
-  /* cabeçalho da página */
   .topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 8px; }
   .topo h1 { font-size: 24px; line-height: 1.2; margin: 0 0 6px; font-weight: 650; letter-spacing: -0.015em; }
   .topo p { font-size: 13.5px; color: var(--ink-2); margin: 0; max-width: 60ch; }
@@ -115,6 +105,8 @@
   }
   .lbl-col { justify-content: center; padding-bottom: 5px; }
   .lbl-row { justify-content: flex-end; padding-right: 10px; white-space: nowrap; }
+
+  /* ── células preenchidas (exemplo 1) ── */
   .cell {
     height: 34px; border-radius: 4px;
     display: flex; align-items: center; justify-content: center;
@@ -122,20 +114,32 @@
     cursor: default;
   }
   .cell:hover { outline: 2px solid var(--surface); outline-offset: -1px; box-shadow: 0 0 0 2px var(--ink-2); }
-
   .c1{background:var(--s1);color:var(--fs1)} .c2{background:var(--s2);color:var(--fs2)}
   .c3{background:var(--s3);color:var(--fs3)} .c4{background:var(--s4);color:var(--fs4)}
   .c5{background:var(--s5);color:var(--fs5)} .c6{background:var(--s6);color:var(--fs6)}
   .c7{background:var(--s7);color:var(--fs7)} .c8{background:var(--s8);color:var(--fs8)}
-  .n4{background:var(--n4);color:var(--fn4)} .n3{background:var(--n3);color:var(--fn3)}
-  .n2{background:var(--n2);color:var(--fn2)} .n1{background:var(--n1);color:var(--fn1)}
-  .z {background:var(--mid);color:var(--fmid)}
-  .p1{background:var(--p1);color:var(--fp1)} .p2{background:var(--p2);color:var(--fp2)}
-  .p3{background:var(--p3);color:var(--fp3)} .p4{background:var(--p4);color:var(--fp4)}
+
+  /* ── bolinhas (exemplo 2) ── */
+  .bolha-cel {
+    height: 40px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: default; background: var(--celula);
+  }
+  .bolha-cel:hover { box-shadow: inset 0 0 0 1px var(--muted); }
+  .bolha {
+    display: block; border-radius: 50%;
+    background: var(--bolha);
+    box-shadow: 0 0 0 2px var(--surface);
+    transition: background .12s;
+  }
+  .bolha-cel:hover .bolha { background: var(--bolha-hover); }
 
   .legend { display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: 11.5px; color: var(--muted); flex-wrap: wrap; }
   .ramp { display: flex; gap: 2px; }
   .ramp span { width: 24px; height: 10px; border-radius: 2px; }
+  .legend-bolhas { display: flex; align-items: center; gap: 16px; }
+  .legend-bolhas .item { display: flex; align-items: center; gap: 7px; }
+  .legend-bolhas .bolha { box-shadow: none; }
 
   #tip {
     position: fixed; pointer-events: none; opacity: 0; transition: opacity .1s;
@@ -166,17 +170,17 @@
   <header class="topo">
     <div>
       <h1>Mapas de calor</h1>
-      <p>Dois exemplos na mesma página, cada um usando um tipo diferente de escala de cor.</p>
+      <p>Dois exemplos na mesma página: um preenchendo a célula com cor, outro usando o tamanho da bolinha.</p>
       <span class="ficticio">Dados fictícios — apenas demonstração</span>
     </div>
     <button id="btn-tema">Alternar tema</button>
   </header>
 
-  <!-- ── exemplo 1: sequencial ─────────────────────────────────────────── -->
+  <!-- ── exemplo 1: células coloridas ──────────────────────────────────── -->
   <section class="card">
     <h2>Pedidos por dia da semana e hora</h2>
     <p class="sub">Volume médio de pedidos na janela das 08h às 21h.</p>
-    <span class="escala">Escala sequencial</span>
+    <span class="escala">Célula colorida · escala sequencial</span>
 
     <div class="toolbar"><button data-alvo="a">Ver tabela</button></div>
 
@@ -199,43 +203,38 @@
     </p>
   </section>
 
-  <!-- ── exemplo 2: divergente ─────────────────────────────────────────── -->
+  <!-- ── exemplo 2: bolinhas ───────────────────────────────────────────── -->
   <section class="card">
-    <h2>Variação do faturamento por categoria</h2>
-    <p class="sub">Comparação com o mesmo mês do ano anterior, em pontos percentuais.</p>
-    <span class="escala">Escala divergente</span>
+    <h2>Peças vendidas por categoria e mês</h2>
+    <p class="sub">Quantidade de peças vendidas ao longo do ano, por categoria.</p>
+    <span class="escala">Bolinha · o tamanho é o valor</span>
 
     <div class="toolbar"><button data-alvo="b">Ver tabela</button></div>
 
     <div id="vis-b">
       <div class="scroll"><div class="grid" id="grid-b"></div></div>
       <div class="legend">
-        <span>queda</span>
-        <span class="ramp">
-          <span class="n4"></span><span class="n3"></span><span class="n2"></span><span class="n1"></span>
-          <span class="z"></span>
-          <span class="p1"></span><span class="p2"></span><span class="p3"></span><span class="p4"></span>
-        </span>
-        <span>alta</span>
-        <span style="margin-left:6px">&mdash; o cinza do meio é a estabilidade (entre &minus;2 e +2 p.p.)</span>
+        <span class="legend-bolhas" id="legenda-bolhas"></span>
+        <span style="margin-left:6px">&mdash; a <em>área</em> do círculo é proporcional à quantidade</span>
       </div>
     </div>
     <div id="tab-b" class="tbl-scroll" hidden></div>
 
     <p class="foot">
-      Duas cores opostas com um cinza neutro no meio. O sinal aparece escrito no
-      número (&minus;12, +8) — nunca só na cor.
+      Aqui quem carrega o valor é o tamanho, não a cor — por isso todas as bolinhas
+      têm a mesma cor. Passe o mouse para ver a quantidade exata.
     </p>
   </section>
 
   <p class="nota">
-    <strong>Por que escalas diferentes?</strong> A <strong>sequencial</strong> serve para
-    magnitude: só existe mais e menos, o zero não é especial, então uma cor só variando de
-    claro a escuro basta. A <strong>divergente</strong> serve para polaridade: existe um lado
-    bom e um lado ruim de um valor de referência, então são duas cores opostas — e o meio
-    precisa parecer &ldquo;nada&rdquo;, por isso é cinza e não uma terceira cor.
-    Nos dois casos o número está escrito na célula e repetido na tabela: a leitura nunca
-    depende só da cor.
+    <strong>Quando usar cada um?</strong> A <strong>célula colorida</strong> preenche a
+    grade inteira, então funciona bem para enxergar blocos e faixas — o padrão salta aos
+    olhos mesmo de longe. A <strong>bolinha</strong> deixa o fundo respirar e compara
+    valores individuais com mais precisão, porque o olho lê diferença de tamanho melhor do
+    que diferença de tom; em compensação, os padrões amplos ficam menos evidentes. Uma
+    regra prática: <em>densidade</em> pede célula, <em>comparação ponto a ponto</em> pede
+    bolinha. Nos dois casos o número está no tooltip e na tabela — a leitura nunca depende
+    só do desenho.
   </p>
 
 </div>
@@ -262,67 +261,119 @@ const B = {
   linhas: ["Vestidos","Blusas","Calças","Saias","Jaquetas","Acessórios","Calçados","Moda praia","Infantil"],
   colunas: ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
   m: [
-    [  8,  13,  12,  -2,   8,  16,  13,  16,  -2, -11,   1,   2],
-    [  1,  -9,   2,   5,  15,  19,  -1,  -5,  -5,  -5,   9,   1],
-    [-12, -11,   8,  11,  -1,  -2, -11,  -6,   6,  -6, -11, -15],
-    [  9,   7,   2,  -5, -23, -14,  -9, -15, -12, -22, -20,   1],
-    [-14, -22, -24,   1,  15,  29,  33,  12,   5,   2,  -9,  -8],
-    [ -1,   8,  11,  27,  25,   8,   9,   5,  10,  20,   5,   0],
-    [-10,  11,   6,   1,   0,  -8,   5,   9,  -4,  -7, -17, -15],
-    [ 34,  31,  11,  -9,  -5, -12, -17, -15, -22,  -2,  23,  30],
-    [ -4,  -3,  11,  14,  24,  16,  -2,   3,   3,   7,  13,  -3]
+    [211, 231, 271, 266, 213, 211, 262, 260, 200, 168, 151, 111],
+    [294, 231, 256, 372, 426, 406, 394, 344, 207, 121, 186, 276],
+    [135, 177, 209, 264, 282, 217, 151, 152, 161, 143, 150, 176],
+    [187, 192, 139,  75,  42,  23,  12,  39,  87, 108, 112, 138],
+    [ 14,  14,  14,  95, 234, 355, 375, 306, 214, 108,  14,  14],
+    [144, 229, 362, 393, 344, 316, 279, 200, 178, 242, 264, 207],
+    [147, 153, 174, 178, 146, 138, 172, 178, 136, 106,  98,  79],
+    [378, 307, 201, 106,  13,  13,  13,  13,  13,  73, 224, 351],
+    [121, 169, 195, 236, 257, 204, 137, 134, 151, 138, 134, 156]
   ]
 };
 
-// ── escalas ────────────────────────────────────────────────────────────
+// ── escala do exemplo 1 (cor) ──────────────────────────────────────────
 const flatA = A.m.flat();
 const minA = Math.min(...flatA), maxA = Math.max(...flatA);
 document.getElementById('lmin').textContent = minA + ' pedidos';
 document.getElementById('lmax').textContent = maxA + ' pedidos';
-
-// sequencial: 8 degraus proporcionais entre o mínimo e o máximo
 const classeA = v => 'c' + Math.min(8, Math.max(1, Math.ceil(((v - minA) / ((maxA - minA) || 1)) * 8) || 1));
 
-// divergente: faixas fixas e simétricas em torno do zero
-const classeB = v =>
-  v <= -25 ? 'n4' : v <= -15 ? 'n3' : v <= -7 ? 'n2' : v < -2 ? 'n1' :
-  v <=   2 ? 'z'  : v <   7  ? 'p1' : v <  15 ? 'p2' : v <  25 ? 'p3' : 'p4';
+// ── escala do exemplo 2 (tamanho) ──────────────────────────────────────
+// área proporcional ao valor => diâmetro proporcional à raiz quadrada.
+// usar o diâmetro direto exageraria as diferenças.
+const maxB = Math.max(...B.m.flat());
+const D_MAX = 30, D_MIN = 6;
+const diametro = v => Math.max(D_MIN, D_MAX * Math.sqrt(v / maxB));
 
-const sinal = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
-
-// ── render ─────────────────────────────────────────────────────────────
-function render(cfg) {
-  const { dados, grade, classe, largura, minLargura, texto, rotulo, dica } = cfg;
+// ── render: exemplo 1 ──────────────────────────────────────────────────
+function renderCelulas(dados, grade, tabela) {
   const grid = document.getElementById(grade);
-  grid.style.gridTemplateColumns = largura + ' repeat(' + dados.colunas.length + ', minmax(34px, 1fr))';
-  grid.style.minWidth = minLargura;
+  grid.style.gridTemplateColumns = '72px repeat(' + dados.colunas.length + ', minmax(34px, 1fr))';
+  grid.style.minWidth = '620px';
 
   grid.appendChild(document.createElement('div'));
   dados.colunas.forEach(col => {
     const d = document.createElement('div');
-    d.className = 'lbl-col';
-    d.textContent = col;
+    d.className = 'lbl-col'; d.textContent = col;
     grid.appendChild(d);
   });
 
   dados.linhas.forEach((linha, i) => {
     const r = document.createElement('div');
-    r.className = 'lbl-row';
-    r.textContent = linha;
+    r.className = 'lbl-row'; r.textContent = linha;
     grid.appendChild(r);
     dados.colunas.forEach((col, j) => {
       const v = dados.m[i][j];
       const c = document.createElement('div');
-      c.className = 'cell ' + classe(v);
-      c.textContent = texto(v);
-      c.dataset.tip = dica(v, linha, col);
+      c.className = 'cell ' + classeA(v);
+      c.textContent = v;
+      c.dataset.tip = '<b>' + v + '</b> pedidos|' + linha + ' &middot; ' + col;
       c.setAttribute('role', 'img');
-      c.setAttribute('aria-label', rotulo(v, linha, col));
+      c.setAttribute('aria-label', linha + ', ' + col + ': ' + v + ' pedidos');
       grid.appendChild(c);
     });
   });
+  montarTabela(dados, tabela, v => String(v));
+}
 
-  // tabela equivalente
+// ── render: exemplo 2 ──────────────────────────────────────────────────
+function renderBolhas(dados, grade, tabela) {
+  const grid = document.getElementById(grade);
+  grid.style.gridTemplateColumns = '92px repeat(' + dados.colunas.length + ', minmax(40px, 1fr))';
+  grid.style.minWidth = '680px';
+
+  grid.appendChild(document.createElement('div'));
+  dados.colunas.forEach(col => {
+    const d = document.createElement('div');
+    d.className = 'lbl-col'; d.textContent = col;
+    grid.appendChild(d);
+  });
+
+  dados.linhas.forEach((linha, i) => {
+    const r = document.createElement('div');
+    r.className = 'lbl-row'; r.textContent = linha;
+    grid.appendChild(r);
+    dados.colunas.forEach((col, j) => {
+      const v = dados.m[i][j];
+      const cel = document.createElement('div');
+      cel.className = 'bolha-cel';
+      cel.dataset.tip = '<b>' + v + '</b> peças|' + linha + ' &middot; ' + col;
+      cel.setAttribute('role', 'img');
+      cel.setAttribute('aria-label', linha + ', ' + col + ': ' + v + ' peças vendidas');
+
+      const b = document.createElement('span');
+      b.className = 'bolha';
+      const d = diametro(v);
+      b.style.width = d.toFixed(1) + 'px';
+      b.style.height = d.toFixed(1) + 'px';
+      cel.appendChild(b);
+      grid.appendChild(cel);
+    });
+  });
+
+  // legenda: três círculos de referência
+  const leg = document.getElementById('legenda-bolhas');
+  [50, 200, 400].forEach(v => {
+    const item = document.createElement('span');
+    item.className = 'item';
+    const b = document.createElement('span');
+    b.className = 'bolha';
+    const d = diametro(v);
+    b.style.width = d.toFixed(1) + 'px';
+    b.style.height = d.toFixed(1) + 'px';
+    const t = document.createElement('span');
+    t.textContent = v;
+    item.append(b, t);
+    leg.appendChild(item);
+  });
+
+  montarTabela(dados, tabela, v => String(v));
+}
+
+// ── tabela equivalente (os dois exemplos) ──────────────────────────────
+function montarTabela(dados, alvo, texto) {
   let html = '<table><caption>Os mesmos dados em tabela.</caption><thead><tr><th>&nbsp;</th>';
   dados.colunas.forEach(col => { html += '<th>' + col + '</th>'; });
   html += '</tr></thead><tbody>';
@@ -331,30 +382,16 @@ function render(cfg) {
     dados.m[i].forEach(v => { html += '<td>' + texto(v) + '</td>'; });
     html += '</tr>';
   });
-  document.getElementById(cfg.tabela).innerHTML = html + '</tbody></table>';
+  document.getElementById(alvo).innerHTML = html + '</tbody></table>';
 }
 
-render({
-  dados: A, grade: 'grid-a', tabela: 'tab-a', classe: classeA,
-  largura: '72px', minLargura: '620px',
-  texto: v => String(v),
-  rotulo: (v, l, c) => l + ', ' + c + ': ' + v + ' pedidos',
-  dica: (v, l, c) => '<b>' + v + '</b> pedidos|' + l + ' &middot; ' + c
-});
-
-render({
-  dados: B, grade: 'grid-b', tabela: 'tab-b', classe: classeB,
-  largura: '92px', minLargura: '640px',
-  texto: sinal,
-  rotulo: (v, l, c) => l + ', ' + c + ': ' + (v >= 0 ? 'alta de ' : 'queda de ') + Math.abs(v) + ' pontos percentuais',
-  dica: (v, l, c) => '<b>' + sinal(v) + ' p.p.</b>|' + l + ' &middot; ' + c + ' &middot; ' +
-                     (v > 2 ? 'acima do ano anterior' : v < -2 ? 'abaixo do ano anterior' : 'estável')
-});
+renderCelulas(A, 'grid-a', 'tab-a');
+renderBolhas(B, 'grid-b', 'tab-b');
 
 // ── tooltip (um só, compartilhado) ─────────────────────────────────────
 const tip = document.getElementById('tip');
 document.addEventListener('mouseover', e => {
-  const c = e.target.closest('.cell');
+  const c = e.target.closest('[data-tip]');
   if (!c) { tip.style.opacity = 0; return; }
   const [cabeca, corpo] = c.dataset.tip.split('|');
   tip.innerHTML = cabeca + '<br><span class="t-sub">' + corpo + '</span>';
